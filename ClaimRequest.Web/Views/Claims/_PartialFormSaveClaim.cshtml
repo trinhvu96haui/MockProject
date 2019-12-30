@@ -1,0 +1,138 @@
+﻿@model ClaimViewModel
+@using MockProjectCore.Constants
+<form action="#" id="form_add_claim">
+    @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.HiddenFor(m => m.Claim.ClaimId, new { id = "ClaimId" })
+    @Html.HiddenFor(m => m.Claim.Status, new { id = "ClaimStatus" })*@
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label for="">
+                Staff Id:
+            </label>
+            <input type="text" class="form-control" value="@Model.Staff.Id" readonly>
+        </div>
+        <div class="col-md-4">
+            <label for="">
+                Staff Name:
+            </label>
+            <input type="text" class="form-control" value="@Model.Staff.StaffName" readonly>
+        </div>
+        <div class="col-md-4">
+            <label for="">
+                Staff Department:
+            </label>
+            <input type="text" value="@Model.Staff.Department.DepartmentName" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label for="Claim_ProjectId">
+                Project Name:
+            </label>            
+            <select name="Claim_ProjectId" id="Claim_ProjectId" class="form-control select2">
+                <option value="">-- Choose project --</option>
+                @foreach (var item in Model.ListSimpleProject)
+                {
+                    <option roleP="@item.RoleInProject" value="@item.ProjectId" duration="@item.Duration" @(item.ProjectId.Equals(Model.Claim.ProjectId) ? "selected" : "")>- @item.ProjectName -</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(m => m.Claim.ProjectId, null, new { @class = "text-danger" })
+
+        </div>
+
+        <div class="col-md-4">
+            <label for="">
+                Role In Project:
+            </label>
+            <input type="text" id="RoleInProject" class="form-control" readonly>
+        </div>
+        <div class="col-md-4">
+            <label for="">
+                Project Duration:
+            </label>
+            <input type="text" id="ProjectDuration" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="row form-group">
+
+        <div class="col-md-4 col-md-offset-4">
+            <label class="pull-right " style="padding-top: 8px;" for="">Total working hour</label>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" style="width: 80%;" id="total_Working_Hours" readonly>
+
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-success pull-right" id="btn_add_claim_modal" @*data-toggle="modal" data-target="#modal-default"*@>Add More</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped" id="table_list_claim_info">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th style="width: 200px;">Total No. of Hours</th>
+                        <th style="width: unset;">Remarks</th>
+                        <th style="width: 170px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Claim.ClaimInfors)
+                    {
+                        <tr index="@(item.ClaimInforId==Guid.Empty?Guid.NewGuid():item.ClaimInforId)" style="color:@(Model.ListClaimInfoError.Contains(item.ClaimInforId)?"red":"black")">
+                            <td>@item.Date.ToShortDateString()</td>
+                            <td>@item.Date.DayOfWeek</td>
+                            <td>@item.From.ToString("HH:mm")</td>
+                            <td>@item.To.ToString("HH:mm")</td>
+                            <td>@item.TotalNoOfHours</td>
+                            <td>@item.Remarks</td>
+                            <td style="padding: 5px;">
+                                <button type="button" class="btn btn-info btn-sm edit_claim_infor ">Edit</button> |
+                                <button type="button" class="btn btn-danger btn-sm remove_claim_infor">Remove</button>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <label for="Remarks">Remarks</label>
+            <textarea class="form-control" cols="30" id="Claim_Remarks" name="Claim_Remarks" rows="5">@Model.Claim.Remark</textarea>
+
+        </div>
+    </div>
+    @if (Model.Claim.ClaimId != Guid.Empty)
+    {
+        <div class="row form-group">
+            <div class="col-md-12">
+                <label for="AuditTrail">Audit Trail</label>
+                @Html.TextAreaFor(m => m.Claim.AuditTrail, new { @class = "form-control", id = "AuditTrail", cols = "30", rows = "5", @readonly = "readonly" })
+                @*<textarea name="AuditTrail" readonly class="form-control" id="AuditTrail" cols="30" rows="5"></textarea>*@
+            </div>
+        </div>
+    }
+
+    <div class="row form-group">
+        <div class="col-md-12 text-right">
+            <button type="button" id="Claim_save" class="btn btn-success">Save</button>
+            @if (Model.Claim.Status == (int)ClaimStatus.Draft)
+            {
+                <button type="button" id="Claim_submit" class="btn btn-primary">Submit</button>
+            }
+            <a href="@Request.UrlReferrer" class="btn btn-default">Close</a>
+        </div>
+    </div>
+</form>

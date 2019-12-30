@@ -1,0 +1,104 @@
+﻿@model ClaimInforViewModel
+ 
+<div class="modal-dialog ">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Claim Information</h4>
+        </div>
+        <div class="modal-body">           
+            <form action="" class="" id="form_add_claim_info">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.HiddenFor(m => m.ClaimInfoId)
+                        <div class="form-group">
+                            <label>Date:</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" name="date" class="form-control pull-right datepicker" value="@(Model.ClaimInfoDate==null?"":Model.ClaimInfoDate.Value.ToShortDateString())" id="datepicker">
+                            </div>
+                            @*@Html.ValidationMessageFor(m => m.ClaimInforDate, null, new { @class = "text-danger" })*@
+
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Day</label>
+                            <input type="text" name="Day" id="Day" class="form-control" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>From:</label>
+
+                            <div class="input-group">
+                                
+                                <input type="text" name="From" id="From" class="form-control timepicker" value="@Model.ClaimInfoFrom.ToString("HH:mm")">
+                                @Html.ValidationMessageFor(m => m.ClaimInfoFrom, null, new { @class = "text-danger" })
+
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>To:</label>
+                            <div class="input-group">
+                                
+
+                                <input type="text" name="To" id="To" value="@Model.ClaimInfoTo.ToString("HH:mm")" class="form-control timepicker">
+                                @Html.ValidationMessageFor(m => m.ClaimInfoTo, null, new { @class = "text-danger" })
+
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="name">Total No. of Hours</label>
+                            
+                            @Html.TextBoxFor(m => m.TotalHour, null, new { @class = "form-control", id = "TotalHours", type = "number", min = "0", step = "0.1" })
+                            @Html.ValidationMessageFor(m => m.TotalHour, null, new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="Remarks">Remarks</label>
+                            @Html.TextBoxFor(m => m.Remark, null, new { @class = "form-control" })                           
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <button type="submit" id="submit_claim_info" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div>
+    <script src="~/Scripts/page/ClaimInfo.js">
+</script>
+
+
+
+
+
+
+
